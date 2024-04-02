@@ -1,17 +1,37 @@
 {
+  "name": "prisma-gql",
   "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "build": "turbo run build",
     "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write .",
+    "check": "prettier --check . && eslint --quiet .",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "eslint": "^8.48.0",
-    "prettier": "^3.0.3",
-    "tsconfig": "workspace:*",
+    "eslint": "^8.57.0",
+    "eslint-config-custom": "workspace:*",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5",
     "turbo": "latest"
   },
-  "packageManager": "pnpm@8.6.10",
-  "name": "prisma-gql"
+  "engines": {
+    "node": ">=18.15.0"
+  },
+  "packageManager": "pnpm@8.0.0",
+  "lint-staged": {
+    "{packages,apps}/**/!(generated)/*.{js,ts,tsx}": [
+      "eslint --fix"
+    ],
+    "{packages,apps}/**/!(generated)/*.{js,ts,tsx,graphql,yml,json}": [
+      "prettier --write"
+    ]
+  }
 }
