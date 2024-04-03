@@ -1,4 +1,4 @@
-import { prisma } from '../../shared/orm';
+import { userEntity } from '../../entities/user';
 import { schemaBuilder } from '../../shared/schemaBuilder';
 import { UserCreateInput } from './model';
 
@@ -11,10 +11,8 @@ schemaBuilder.mutationFields((t) => ({
         required: true,
       }),
     },
-    resolve: (query, parent, args) => {
-      return prisma.user.create({
-        data: args.data,
-      });
+    resolve: (query, parent, args, ctx) => {
+      return userEntity.createOneUser(ctx.userInfo, args.data);
     },
   }),
 }));

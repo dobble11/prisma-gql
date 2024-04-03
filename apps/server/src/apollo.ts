@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import { schema } from './schema';
 import { SERVER_PORT } from './shared/constants';
 import { logger } from './shared/logger';
+import { createContext } from './resolvers/context';
 
 export async function startApolloServer() {
   const app = express();
@@ -19,8 +20,20 @@ export async function startApolloServer() {
 
   await apolloServer.start();
 
-  app.use('/', cors(), bodyParser.json());
-  app.use('/graphql', expressMiddleware(apolloServer));
+  app.use(
+    '/',
+    cors({
+      credentials: true,
+      origin: '*',
+    }),
+    bodyParser.json(),
+  );
+  app.use(
+    '/graphql',
+    expressMiddleware(apolloServer, {
+      context: createContext,
+    }),
+  );
 
   await new Promise<void>((resolve) => httpServer.listen({ port: SERVER_PORT }, resolve));
 

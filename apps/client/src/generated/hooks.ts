@@ -35,6 +35,42 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  Date: { input: number; output: number; }
+};
+
+export type BooleanFilter = {
+  equals?: InputMaybe<Scalars['Boolean']['input']>;
+  in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  is?: InputMaybe<Scalars['Boolean']['input']>;
+  isNot?: InputMaybe<Scalars['Boolean']['input']>;
+  not?: InputMaybe<BooleanFilter>;
+  notIn?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+};
+
+export type DateTimeFilter = {
+  equals?: InputMaybe<Scalars['Date']['input']>;
+  gt?: InputMaybe<Scalars['Date']['input']>;
+  gte?: InputMaybe<Scalars['Date']['input']>;
+  in?: InputMaybe<Array<Scalars['Date']['input']>>;
+  is?: InputMaybe<Scalars['Date']['input']>;
+  isNot?: InputMaybe<Scalars['Date']['input']>;
+  lt?: InputMaybe<Scalars['Date']['input']>;
+  lte?: InputMaybe<Scalars['Date']['input']>;
+  not?: InputMaybe<DateTimeFilter>;
+  notIn?: InputMaybe<Array<Scalars['Date']['input']>>;
+};
+
+export type IntFilter = {
+  equals?: InputMaybe<Scalars['Int']['input']>;
+  gt?: InputMaybe<Scalars['Int']['input']>;
+  gte?: InputMaybe<Scalars['Int']['input']>;
+  in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  is?: InputMaybe<Scalars['Int']['input']>;
+  isNot?: InputMaybe<Scalars['Int']['input']>;
+  lt?: InputMaybe<Scalars['Int']['input']>;
+  lte?: InputMaybe<Scalars['Int']['input']>;
+  not?: InputMaybe<IntFilter>;
+  notIn?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 export type Mutation = {
@@ -47,9 +83,38 @@ export type MutationCreateUserArgs = {
   data: UserCreateInput;
 };
 
+export enum OrderBy {
+  Asc = 'Asc',
+  Desc = 'Desc'
+}
+
 export type Query = {
   __typename?: 'Query';
   users: Array<User>;
+};
+
+
+export type QueryUsersArgs = {
+  orderBy?: InputMaybe<Array<UserOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<UserWhereInput>;
+};
+
+export type StringFilter = {
+  contains?: InputMaybe<Scalars['String']['input']>;
+  endsWith?: InputMaybe<Scalars['String']['input']>;
+  equals?: InputMaybe<Scalars['String']['input']>;
+  gt?: InputMaybe<Scalars['String']['input']>;
+  gte?: InputMaybe<Scalars['String']['input']>;
+  in?: InputMaybe<Array<Scalars['String']['input']>>;
+  is?: InputMaybe<Scalars['String']['input']>;
+  isNot?: InputMaybe<Scalars['String']['input']>;
+  lt?: InputMaybe<Scalars['String']['input']>;
+  lte?: InputMaybe<Scalars['String']['input']>;
+  not?: InputMaybe<StringFilter>;
+  notIn?: InputMaybe<Array<Scalars['String']['input']>>;
+  startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type User = {
@@ -62,6 +127,18 @@ export type User = {
 export type UserCreateInput = {
   email: Scalars['String']['input'];
   name: Scalars['String']['input'];
+};
+
+export type UserOrderByWithRelationInput = {
+  createdAt?: InputMaybe<OrderBy>;
+  name?: InputMaybe<OrderBy>;
+  updatedAt?: InputMaybe<OrderBy>;
+};
+
+export type UserWhereInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<StringFilter>;
 };
 
 export type UsersQueryVariables = Exact<{ [key: string]: never; }>;

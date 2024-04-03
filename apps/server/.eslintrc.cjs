@@ -3,6 +3,7 @@ module.exports = {
   root: true,
   extends: ['custom'],
   rules: {
-    'no-console': 'error',
+    'no-console': 'warn',
+    '@typescript-eslint/no-unsafe-declaration-merging': 'off',
   },
 };
