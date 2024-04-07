@@ -5,8 +5,16 @@ import { isProduction } from './shared/constants';
 import { schemaBuilder } from './shared/schemaBuilder';
 import './resolvers';
 
-schemaBuilder.queryType();
-schemaBuilder.mutationType();
+schemaBuilder.queryType({
+  authScopes: {
+    loggedIn: true,
+  },
+});
+schemaBuilder.mutationType({
+  authScopes: {
+    loggedIn: true,
+  },
+});
 
 export const schema = schemaBuilder.toSchema();
 

@@ -17,10 +17,10 @@ export const createContext = async ({
 }: {
   req: Request;
   res: Response;
-}): Promise<MyContext> => {
+}): Promise<Partial<MyContext>> => {
   const token = req.headers.authorization;
   if (!token) {
-    throw new GraphQLError(LogKey.UNAUTHENTICATED);
+    return {};
   }
 
   const { result, err } = await fa(userEntity.verifyToken(token));

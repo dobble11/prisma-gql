@@ -6,7 +6,7 @@ import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { schema } from './schema';
-import { SERVER_PORT } from './shared/constants';
+import { CORS_ALLOWED_ORIGINS, SERVER_PORT } from './shared/constants';
 import { logger } from './shared/logger';
 import { createContext } from './resolvers/context';
 
@@ -24,7 +24,7 @@ export async function startApolloServer() {
     '/',
     cors({
       credentials: true,
-      origin: '*',
+      origin: CORS_ALLOWED_ORIGINS,
     }),
     bodyParser.json(),
   );

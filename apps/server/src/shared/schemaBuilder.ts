@@ -1,13 +1,19 @@
 import SchemaBuilder from '@pothos/core';
 import PrismaPlugin from '@pothos/plugin-prisma';
 import PrismaUtils from '@pothos/plugin-prisma-utils';
+import ScopeAuthPlugin from '@pothos/plugin-scope-auth';
 import type PrismaTypes from '@pothos/plugin-prisma/generated';
 import { prisma } from './orm';
 import { MyContext } from '../resolvers/context';
 import { CurrentUserInfo } from '../resolvers/user/model';
+import { LogKey } from './logger';
 
 type CustomizedSchemaObjectType = {
   CurrentUserInfo: CurrentUserInfo;
+};
+
+type AuthScopes = {
+  loggedIn: boolean;
 };
 
 export const schemaBuilder = new SchemaBuilder<{
@@ -20,11 +26,18 @@ export const schemaBuilder = new SchemaBuilder<{
     };
   };
   Objects: CustomizedSchemaObjectType;
+  AuthScopes: AuthScopes;
 }>({
-  plugins: [PrismaPlugin, PrismaUtils],
+  plugins: [ScopeAuthPlugin, PrismaPlugin, PrismaUtils],
   prisma: {
     client: prisma,
     filterConnectionTotalCount: true,
+  },
+  authScopes: async (context) => ({
+    loggedIn: !!context.userInfo,
+  }),
+  scopeAuthOptions: {
+    unauthorizedError: () => new Error(LogKey.UNAUTHENTICATED),
   },
 });
 

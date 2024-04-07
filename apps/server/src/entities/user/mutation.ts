@@ -3,6 +3,7 @@ import { JWT_SECRET, JWT_VALID_DAY_COUNT } from '../../shared/constants';
 import { ContextUserInfo } from '../../resolvers/context';
 import { UserCreateInput } from '../../resolvers/user/model';
 import { prisma } from '../../shared/orm';
+import { LogKey } from '../../shared/logger';
 
 export class UserMutationEntity {
   public async signToken(userId: string) {
@@ -21,5 +22,19 @@ export class UserMutationEntity {
     return prisma.user.create({
       data,
     });
+  }
+
+  public async login(email: string) {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new Error(LogKey.NOT_FOUND_USER);
+    }
+
+    return this.signToken(user.id);
   }
 }

@@ -15,4 +15,12 @@ schemaBuilder.mutationFields((t) => ({
       return userEntity.createOneUser(ctx.userInfo, args.data);
     },
   }),
+  login: t.field({
+    skipTypeScopes: true,
+    type: 'String',
+    args: {
+      email: t.arg.string({ required: true }),
+    },
+    resolve: (parent, args) => userEntity.login(args.email),
+  }),
 }));

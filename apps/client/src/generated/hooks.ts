@@ -1,6 +1,6 @@
 import { GRAPHQL_ENDPOINT } from '../shared/constants';
 import { getReactQueryFetchParams } from '../shared/utils';
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useQuery, useMutation, UseQueryOptions, UseMutationOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -47,6 +47,12 @@ export type BooleanFilter = {
   notIn?: InputMaybe<Array<Scalars['Boolean']['input']>>;
 };
 
+export type CurrentUserInfo = {
+  __typename?: 'CurrentUserInfo';
+  id: Scalars['String']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+};
+
 export type DateTimeFilter = {
   equals?: InputMaybe<Scalars['Date']['input']>;
   gt?: InputMaybe<Scalars['Date']['input']>;
@@ -76,11 +82,17 @@ export type IntFilter = {
 export type Mutation = {
   __typename?: 'Mutation';
   createUser: User;
+  login: Scalars['String']['output'];
 };
 
 
 export type MutationCreateUserArgs = {
   data: UserCreateInput;
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String']['input'];
 };
 
 export enum OrderBy {
@@ -90,6 +102,7 @@ export enum OrderBy {
 
 export type Query = {
   __typename?: 'Query';
+  currentUserInfo: CurrentUserInfo;
   users: Array<User>;
 };
 
@@ -146,6 +159,13 @@ export type UsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type UsersQuery = { __typename?: 'Query', users: Array<{ __typename?: 'User', id: string, email: string }> };
 
+export type LoginMutationVariables = Exact<{
+  email: Scalars['String']['input'];
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login: string };
+
 
 export const UsersDocument = `
     query users {
@@ -165,5 +185,19 @@ export const useUsersQuery = <
     useQuery<UsersQuery, TError, TData>(
       variables === undefined ? ['users'] : ['users', variables],
       fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables),
+      options
+    );
+export const LoginDocument = `
+    mutation login($email: String!) {
+  login(email: $email)
+}
+    `;
+export const useLoginMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(options?: UseMutationOptions<LoginMutation, TError, LoginMutationVariables, TContext>) =>
+    useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
+      ['login'],
+      (variables?: LoginMutationVariables) => fetcher<LoginMutation, LoginMutationVariables>(LoginDocument, variables)(),
       options
     );
