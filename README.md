@@ -1,81 +1,85 @@
-# Turborepo starter
+# prisma-gql
 
-This is an official starter Turborepo.
+这是以类型安全为目标的全栈 monorepo 模版，采用 GraphQL 作为数据交换层，并通过 [@graphql-codegen/cli](https://the-guild.dev/graphql/codegen) 将编写的查询 gql 生成前端请求 Hook 代码。
 
-## Using this example
+数据库访问由 ORM [prisma](https://www.prisma.io/) 驱动，通过 [pothos](https://pothos-graphql.dev/) 构建 code-first GraphQL schema，结合 pothos prisma 插件实现类型从数据库模型映射到 GraphQL，再映射到前端查询 Hook，保证了整个链路类型的安全。
 
-Run the following command:
+> 此模版包含用户登录并查询 User 表的最小 DEMO 代码
+
+![preview](https://raw.github.com/dobble11/aseets/master/prisma-gql-demo.gif)
+
+## 项目结构
+
+- `apps/client`: 客户端根目录
+- `apps/server`: 服务端根目录
+- `packages/eslint-config-custom`: ESLint 基础配置
+- `packages/tsconfig`: TypeScript 配置，包含服务端、React 应用、React Library 配置
+
+## 主要技术栈
+
+客户端
+
+- React + Vite + [@tanstack/react-query](https://tanstack.com/query/latest) + [@vanilla-extract/css](https://vanilla-extract.style/documentation/getting-started/)
+
+服务端
+
+- [@apollo/server](https://www.apollographql.com/docs/apollo-server/) - GraphQL 服务器，底层基于 Express
+- [pothos](https://pothos-graphql.dev/) - 构建 code-first GraphQL schema
+- [prisma](https://www.prisma.io/) - ORM
+- [pino](https://getpino.io/) - 日志打印库
+
+仓库
+
+- [turbo](https://turbo.build/repo/docs) - monorepo 构建系统
+- [pnpm](https://pnpm.io/) - 包管理器
+
+## 开始
+
+### 安装依赖
 
 ```sh
-npx create-turbo@latest
+pnpm i
 ```
 
-## What's inside?
+### 配置服务端环境变量
 
-This Turborepo includes the following packages/apps:
+```env
+SERVER_PORT=4010
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/prisma-gql?schema=public
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+# 通过 docker compose 启动时需要配置
+PG_USER=postgres
+PG_PASSWORD=postgres
 ```
 
-### Develop
+> 以上数据库信息可以根据自身情况进行配置
 
-To develop all apps and packages, run the following command:
+### 准备服务端依赖服务
 
+如果没有 postgres 服务，可以单独启动或者使用 docker compose 启动
+
+```sh
+# 单独启动
+docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=postgres -d postgres
+
+# 使用 docker compose
+cd apps/server
+docker compose up -d
 ```
-cd my-turborepo
+
+### 创建数据库并生成访问代码
+
+```sh
+cd apps/server
+pnpm prisma db push
+
+# 初始化用户
+pnpm tsx ./scripts/seed.ts
+```
+
+### 启动服务
+
+```sh
+# 仓库根目录下
 pnpm dev
 ```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
