@@ -6,6 +6,8 @@
 
 > 此模版包含用户登录并查询 User 表的最小 DEMO 代码
 
+## 预览
+
 ![preview](https://raw.github.com/dobble11/aseets/master/prisma-gql-demo.gif)
 
 ## 项目结构
@@ -42,6 +44,8 @@ pnpm i
 ```
 
 ### 配置服务端环境变量
+
+新建 `apps/server/.env` 文件，输入以下内容
 
 ```env
 SERVER_PORT=4010
