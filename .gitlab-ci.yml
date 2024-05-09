@@ -1,0 +1,37 @@
+default:
+  image: node:18.20.0
+  before_script:
+    - npm install pnpm@8.15.5 --location=global
+    - pnpm config set store-dir .pnpm-store
+    - pnpm i
+  cache:
+    key: prisma-gql-$CI_COMMIT_REF_NAME
+    paths:
+      - .pnpm-store
+      - node_modules
+      - packages/*/node_modules
+      - apps/*/node_modules
+
+stages:
+  - check
+  - test
+  - deploy
+
+check:
+  stage: check
+  script:
+    - pnpm check
+
+test:
+  stage: test
+  script:
+    - pnpm test
+
+deploy:
+  stage: deploy
+  script:
+    - cd apps/client
+    - pnpm build
+  only:
+    - main
+  when: manual
