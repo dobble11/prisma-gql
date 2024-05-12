@@ -87,3 +87,23 @@ pnpm tsx ./scripts/seed.ts
 # 仓库根目录下
 pnpm dev
 ```
+
+## server 代码结构
+
+以**资源**为维度组织成不同目录，读写分开定义
+
+### resolvers
+
+定义所有接口信息，划分为 3 个文件
+
+- model：定义 GraphQL 类型
+- query：查询字段
+- mutation：更新字段
+
+默认所有字段需要登录才能访问，可以通过设置 `skipTypeScopes: true` 跳过，例如 [login](https://github.com/dobble11/prisma-gql/blob/main/apps/server/src/resolvers/user/mutation.ts#L19) 字段，更多 auth 高级用法查看 [@pothos/plugin-scope-auth](https://pothos-graphql.dev/docs/plugins/scope-auth)
+
+### entities
+
+对应资源操作的业务逻辑，resolver 负责调用，划分为 query、mutation、index 3 个文件，其中 index 用于组合两个 class 并导出 entity  实例化对象
+
+其中 public auth 访问方法固定第一个参数 `executor` 用于获取 ctx 的用户信息
