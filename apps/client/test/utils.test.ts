@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, test, vi } from 'vitest';
-import { fa, getReactQueryFetchParams, sleep } from '../src/shared/utils';
+import { tryit, getReactQueryFetchParams, sleep } from '../src/shared/utils';
 
 afterEach(() => {
   localStorage.clear();
@@ -15,14 +15,14 @@ describe('safe await function', () => {
   };
 
   test('success', async () => {
-    const { result, err } = await fa(fn(true));
-    expect(result).toEqual({ price: 10 });
+    const [err, value] = await tryit(fn(true));
+    expect(value).toEqual({ price: 10 });
     expect(err).toBeUndefined();
   });
 
   test('error', async () => {
-    const { result, err } = await fa(fn(false));
-    expect(result).toBeUndefined();
+    const [err, value] = await tryit(fn(false));
+    expect(value).toBeUndefined();
     expect(err).not.toBeUndefined();
   });
 });
@@ -57,6 +57,7 @@ describe('get fetch query params', () => {
     const target = {
       headers: {
         'Content-Type': 'application/json',
+        Authorization: '',
       },
       mode: 'cors',
       credentials: 'include',

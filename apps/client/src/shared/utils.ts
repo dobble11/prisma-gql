@@ -16,19 +16,13 @@ export const getReactQueryFetchParams = (): RequestInit => {
 type Without<T, U> = { [K in Exclude<keyof T, keyof U>]?: never };
 export type XOR<T, U> = T | U extends object ? (Without<T, U> & U) | (Without<U, T> & T) : T | U;
 
-type Success<V> = {
-  result: V;
-};
-type Failure = {
-  err: Error;
-};
+type Success<V> = [err: undefined, value: V];
+type Failure = [err: Error, value: undefined];
 
-export function fa<T>(promise: Promise<T>): Promise<XOR<Success<T>, Failure>> {
+export function tryit<T>(promise: Promise<T>): Promise<XOR<Success<T>, Failure>> {
   return promise.then(
-    (val) => ({ result: val, err: void 0 }),
-    (err) => {
-      return { result: void 0, err };
-    },
+    (value) => [void 0, value],
+    (err) => [err, void 0],
   );
 }
 

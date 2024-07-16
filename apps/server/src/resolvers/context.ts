@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 import { LogKey, logger } from '../shared/logger';
 import { prisma } from '../shared/orm';
 import { GraphQLError } from 'graphql';
-import { fa } from '../shared/utils';
+import { tryit } from '../shared/utils';
 import { userEntity } from '../entities/user';
 
 export interface ContextUserInfo extends User {}
@@ -23,7 +23,7 @@ export const createContext = async ({
     return {};
   }
 
-  const { result, err } = await fa(userEntity.verifyToken(token));
+  const [err, result] = await tryit(userEntity.verifyToken(token));
   if (err) {
     throw new GraphQLError(LogKey.UNAUTHENTICATED);
   }
