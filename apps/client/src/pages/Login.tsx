@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as styles from './Login.css';
 import { useLoginMutation } from '../generated/hooks';
-import { setToken } from '../shared/token';
+import { removeToken, setToken } from '../shared/token';
 import { useNavigate } from 'react-router-dom';
 
 const Login: React.FC = () => {
@@ -19,6 +19,7 @@ const Login: React.FC = () => {
       />
       <button
         onClick={async () => {
+          removeToken();
           const data = await mutateAsync({ email });
           setToken(data.login);
           navigate('/', { replace: true });
