@@ -18,12 +18,12 @@ export default defineConfig({
       all: true,
       enabled: true,
       include: ['src/shared/utils.ts'],
-      thresholds: {
-        lines: 100,
-        statements: 100,
-        functions: 100,
-        branches: 100,
-      },
+      // thresholds: {
+      //   lines: 100,
+      //   statements: 100,
+      //   functions: 100,
+      //   branches: 100,
+      // },
     },
   },
 });

@@ -23,3 +23,9 @@ export const applyOnlyMethodsMixins = (derivedCtor: any, constructors: any[]) =>
     });
   });
 };
+
+export const sleep = (ms: number) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+};
