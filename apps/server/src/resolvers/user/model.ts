@@ -3,9 +3,9 @@ import { ContextUserInfo } from '../context';
 
 schemaBuilder.prismaObject('User', {
   fields: (t) => ({
-    id: t.exposeID('id'),
-    email: t.exposeString('email'),
-    name: t.exposeString('name', { nullable: true }),
+    id: t.exposeID('id', { nullable: false }),
+    email: t.exposeString('email', { nullable: false }),
+    name: t.exposeString('name'),
   }),
 });
 
@@ -13,8 +13,8 @@ export type CurrentUserInfo = ContextUserInfo;
 
 schemaBuilder.objectType('CurrentUserInfo', {
   fields: (t) => ({
-    id: t.exposeString('id'),
-    name: t.exposeString('name', { nullable: true }),
+    id: t.exposeString('id', { nullable: false }),
+    name: t.exposeString('name'),
   }),
 });
 

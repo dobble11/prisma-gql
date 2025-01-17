@@ -5,6 +5,7 @@ import { UserCreateInput } from './model';
 schemaBuilder.mutationFields((t) => ({
   createUser: t.prismaField({
     type: 'User',
+    nullable: false,
     args: {
       data: t.arg({
         type: UserCreateInput,
@@ -18,6 +19,7 @@ schemaBuilder.mutationFields((t) => ({
   login: t.field({
     skipTypeScopes: true,
     type: 'String',
+    nullable: false,
     args: {
       email: t.arg.string({ required: true }),
     },

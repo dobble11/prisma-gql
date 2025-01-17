@@ -5,10 +5,12 @@ import { UserOrderByWithRelationInput, UserWhereInput } from './model';
 schemaBuilder.queryFields((t) => ({
   currentUserInfo: t.field({
     type: 'CurrentUserInfo',
+    nullable: false,
     resolve: async (root, args, ctx) => ctx.userInfo,
   }),
   users: t.prismaField({
     type: ['User'],
+    nullable: false,
     args: {
       where: t.arg({ type: UserWhereInput }),
       orderBy: t.arg({ type: [UserOrderByWithRelationInput] }),

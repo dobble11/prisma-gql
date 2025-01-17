@@ -33,10 +33,10 @@ export const schemaBuilder = new SchemaBuilder<{
     client: prisma,
     filterConnectionTotalCount: true,
   },
-  authScopes: async (context) => ({
-    loggedIn: !!context.userInfo,
-  }),
-  scopeAuthOptions: {
+  scopeAuth: {
+    authScopes: (context) => ({
+      loggedIn: !!context.userInfo,
+    }),
     unauthorizedError: () => new Error(LogKey.UNAUTHENTICATED),
   },
 });
