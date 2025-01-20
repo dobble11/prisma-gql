@@ -167,6 +167,7 @@ export type LoginMutationVariables = Exact<{
 export type LoginMutation = { __typename?: 'Mutation', login: string };
 
 
+
 export const UsersDocument = `
     query users {
   users {
@@ -175,29 +176,38 @@ export const UsersDocument = `
   }
 }
     `;
+
 export const useUsersQuery = <
       TData = UsersQuery,
       TError = unknown
     >(
       variables?: UsersQueryVariables,
-      options?: UseQueryOptions<UsersQuery, TError, TData>
-    ) =>
-    useQuery<UsersQuery, TError, TData>(
-      variables === undefined ? ['users'] : ['users', variables],
-      fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables),
-      options
-    );
+      options?: Omit<UseQueryOptions<UsersQuery, TError, TData>, 'queryKey'> & { queryKey?: UseQueryOptions<UsersQuery, TError, TData>['queryKey'] }
+    ) => {
+    
+    return useQuery<UsersQuery, TError, TData>(
+      {
+    queryKey: variables === undefined ? ['users'] : ['users', variables],
+    queryFn: fetcher<UsersQuery, UsersQueryVariables>(UsersDocument, variables),
+    ...options
+  }
+    )};
+
 export const LoginDocument = `
     mutation login($email: String!) {
   login(email: $email)
 }
     `;
+
 export const useLoginMutation = <
       TError = unknown,
       TContext = unknown
-    >(options?: UseMutationOptions<LoginMutation, TError, LoginMutationVariables, TContext>) =>
-    useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
-      ['login'],
-      (variables?: LoginMutationVariables) => fetcher<LoginMutation, LoginMutationVariables>(LoginDocument, variables)(),
-      options
-    );
+    >(options?: UseMutationOptions<LoginMutation, TError, LoginMutationVariables, TContext>) => {
+    
+    return useMutation<LoginMutation, TError, LoginMutationVariables, TContext>(
+      {
+    mutationKey: ['login'],
+    mutationFn: (variables?: LoginMutationVariables) => fetcher<LoginMutation, LoginMutationVariables>(LoginDocument, variables)(),
+    ...options
+  }
+    )};

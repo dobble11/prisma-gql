@@ -21,7 +21,7 @@
 
 客户端
 
-- React + Vite + [@tanstack/react-query](https://tanstack.com/query/v4/docs/framework/react/overview) + [@vanilla-extract/css](https://vanilla-extract.style/documentation/getting-started/)
+- React + Vite + [@tanstack/react-query](https://tanstack.com/query/v5/docs/framework/react/overview) + [@vanilla-extract/css](https://vanilla-extract.style/documentation/getting-started/)
 
 服务端
 
