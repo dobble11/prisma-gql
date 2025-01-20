@@ -21,7 +21,7 @@
 
 客户端
 
-- React + Vite + [@tanstack/react-query](https://tanstack.com/query/latest) + [@vanilla-extract/css](https://vanilla-extract.style/documentation/getting-started/)
+- React + Vite + [@tanstack/react-query](https://tanstack.com/query/v4/docs/framework/react/overview) + [@vanilla-extract/css](https://vanilla-extract.style/documentation/getting-started/)
 
 服务端
 
@@ -106,4 +106,4 @@ pnpm dev
 
 对应资源操作的业务逻辑，resolver 负责调用，划分为 query、mutation、index 3 个文件，其中 index 用于组合两个 class 并导出 entity  实例化对象
 
-其中 public auth 访问方法固定第一个参数 `executor` 用于获取 ctx 的用户信息
+其中公共鉴权方法固定第一个参数 `executor` 用于获取当前已登录的用户信息
